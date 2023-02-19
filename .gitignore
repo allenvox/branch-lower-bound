@@ -1,0 +1,4 @@
+*.dSYM
+*.txt
+lb
+.DS_Store
