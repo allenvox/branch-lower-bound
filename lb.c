@@ -31,11 +31,11 @@ int lower_bound_opt(int *v, int n, int value)
     int left = 0, right = n - 1;
     while (left < right) {
         int mid = (left + right) / 2;
-        // todo: remove branching
-        if (v[mid] >= value)
-            right = mid;
-        else
-            left = mid + 1;
+
+        int ftrue = (v[mid] >= value);
+        int ffalse = ftrue ^ 1;
+        right = ftrue * mid + ffalse * right;
+        left = ftrue * left + ffalse * (mid + 1);
     }
     return v[left];
 }
@@ -48,8 +48,8 @@ double run()
     }
 
     double t = wtime();
-    volatile int lb = lower_bound(v, N, 2 * N);
-    //volatile int lb = lower_bound_opt(v, N, 2 * N);
+    //volatile int lb = lower_bound(v, N, 2 * N);
+    volatile int lb = lower_bound_opt(v, N, 2 * N);
     t = wtime() - t;
 
     #if 1
@@ -68,6 +68,5 @@ int main()
         t += run();
     t /= nreps;
     printf("Time %.9f\n", t);
-
     return 0;
 }
